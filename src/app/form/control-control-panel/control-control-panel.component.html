@@ -1,0 +1,11 @@
+<div style="width: 100%; display: flex; gap: 0.125rem">
+  <button (click)="control().setDisabled(!control().disabled())">
+    {{ control().disabled() ? "Enable" : "Disable" }}
+  </button>
+  <button (click)="control().setHidden(!control().hidden())">
+    {{ control().hidden() ? "Show" : "Hide" }}
+  </button>
+  <button (click)="control().setReadOnly(!control().readOnly())">
+    {{ control().readOnly() ? "Make editable" : "Make read-only" }}
+  </button>
+</div>

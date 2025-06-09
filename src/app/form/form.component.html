@@ -1,0 +1,72 @@
+<div style="width: 100%; display: flex; justify-content: center">
+  <div
+    style="
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    "
+  >
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <button (click)="formGroup.reset()">Reset</button>
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <app-checkbox
+        style="width: 50%"
+        inputId="disableName"
+        label="Disable name"
+        [control]="formGroup.controls().hide.controls().disableName"
+      />
+      <app-checkbox
+        style="width: 50%"
+        inputId="disableLines"
+        label="Disable lines"
+        [control]="formGroup.controls().hide.controls().disableLines"
+      />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <app-text-field
+        style="width: 50%"
+        inputId="firstName"
+        label="First name"
+        [control]="formGroup.controls().name.controls().firstName"
+      />
+      <app-text-field
+        style="width: 50%"
+        inputId="lastName"
+        label="Last name"
+        [control]="formGroup.controls().name.controls().lastName"
+      />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <app-control-control-panel
+        style="width: 50%"
+        [control]="formGroup.controls().name.controls().firstName"
+      />
+      <app-control-control-panel
+        style="width: 50%"
+        [control]="formGroup.controls().name.controls().lastName"
+      />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <app-text-field
+        style="width: 50%"
+        inputId="search"
+        label="Search"
+        [control]="formGroup.controls().search"
+      />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      <app-multi-text-field
+        style="width: 50%"
+        inputId="lines"
+        label="Lines"
+        [control]="formGroup.controls().lines"
+      />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
+      {{ formGroup.value() | json }}
+    </div>
+  </div>
+</div>

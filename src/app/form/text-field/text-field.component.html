@@ -1,0 +1,15 @@
+<div style="width: 100%; display: flex; flex-direction: column; gap: 0.25rem">
+  @if (label(); as label) {
+  <label [for]="inputId()">{{ label }}</label>
+  }
+  <input [id]="inputId()" type="text" [signalFormControl]="control()" />
+  @if (control().touched()) { @if(control().errors(); as errors) {
+  <span style="color: red; font-size: 0.75rem; font-style: italic">
+    {{ errors | errorMessage }}
+  </span>
+  } } @if (control().pending()) {
+  <span style="color: blue; font-size: 0.75rem; font-style: italic">
+    Validating...
+  </span>
+  }
+</div>
