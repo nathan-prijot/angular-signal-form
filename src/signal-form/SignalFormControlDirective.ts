@@ -2,22 +2,31 @@ import {
   Directive,
   effect,
   ElementRef,
+  forwardRef,
   HostListener,
   inject,
   input,
 } from '@angular/core';
 import { SignalFormControl } from './SignalFormControl';
+import { NgSignalFormControl } from './NgSignalFormControl';
 
 @Directive({
-  selector: 'input[signalFormControl]',
+  selector: '[signalFormControl]',
+  providers: [
+    {
+      provide: NgSignalFormControl,
+      useExisting: forwardRef(() => SignalFormControlDirective),
+    },
+  ],
 })
-export class SignalFormControlDirective {
+export class SignalFormControlDirective extends NgSignalFormControl {
   private readonly _elementRef: ElementRef<HTMLInputElement> =
     inject(ElementRef);
 
   readonly signalFormControl = input.required<SignalFormControl>();
 
   constructor() {
+    super();
     effect(() => {
       const value = this.signalFormControl().rawValue();
       const inputElement = this._elementRef.nativeElement;

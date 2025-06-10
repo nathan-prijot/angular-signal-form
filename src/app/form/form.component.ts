@@ -8,8 +8,11 @@ import { SignalValidationErrors } from '../../signal-form/SignalValidationErrors
 import { SignalValidators } from '../../signal-form/SignalValidators';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { ControlControlPanelComponent } from './control-control-panel/control-control-panel.component';
+import { ErrorMessagePipe } from './error-message.pipe';
 import { MultiTextFieldComponent } from './multi-text-field/multi-text-field.component';
 import { TextFieldComponent } from './text-field/text-field.component';
+import { SubControlInputComponent } from './sub-control-input/sub-control-input.component';
+import { SignalFormControlDirective } from '../../signal-form/SignalFormControlDirective';
 
 @Component({
   selector: 'app-form',
@@ -20,6 +23,9 @@ import { TextFieldComponent } from './text-field/text-field.component';
     MultiTextFieldComponent,
     ControlControlPanelComponent,
     CheckboxComponent,
+    ErrorMessagePipe,
+    SubControlInputComponent,
+    SignalFormControlDirective,
   ],
 })
 export class FormComponent {
@@ -60,9 +66,9 @@ export class FormComponent {
     const search = new SignalFormControl('', {
       validators: [SignalValidators.required],
       asyncValidators: [this._searchValidator.bind(this)],
-      //updateOn: 'blur',
+      updateOn: 'blur',
     });
-    const lines = new SignalFormArray<SignalFormControl<string>>([], {
+    const lines = new SignalFormArray<SignalFormControl<string, number>>([], {
       disabled: () => name.invalid() || !!hide.controls().disableLines.value(),
     });
     return { hide, name, search, lines };

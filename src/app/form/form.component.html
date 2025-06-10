@@ -39,6 +39,13 @@
         [control]="formGroup.controls().name.controls().lastName"
       />
     </div>
+
+    @if (formGroup.controls().name.touched()) { @if
+    (formGroup.controls().name.errors(); as errors) {
+    <span style="color: red; font-size: 0.75rem; font-style: italic">
+      {{ errors | errorMessage }}
+    </span>
+    } }
     <div style="width: 100%; display: flex; gap: 1rem">
       <app-control-control-panel
         style="width: 50%"
@@ -63,6 +70,9 @@
         inputId="lines"
         label="Lines"
         [control]="formGroup.controls().lines"
+      />
+      <app-sub-control-input
+        [signalFormControl]="formGroup.controls().search"
       />
     </div>
     <div style="width: 100%; display: flex; gap: 1rem">

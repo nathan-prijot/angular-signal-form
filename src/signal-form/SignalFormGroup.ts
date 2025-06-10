@@ -27,8 +27,9 @@ type SignalFormGroupControls<
 };
 
 export class SignalFormGroup<
-  TControl extends { [K in keyof TControl]: SignalAbstractControl }
-> extends SignalAbstractControl<SignalFormGroupValue<TControl>> {
+  TControl extends { [K in keyof TControl]: SignalAbstractControl },
+  TMetadata = unknown
+> extends SignalAbstractControl<SignalFormGroupValue<TControl>, TMetadata> {
   private readonly _controls: WritableSignal<SignalFormGroupControls<TControl>>;
 
   readonly controls: Signal<SignalFormGroupControls<TControl>>;
@@ -47,7 +48,10 @@ export class SignalFormGroup<
       | ((
           control: SignalFormGroup<TControl>
         ) => SignalFormGroupControls<TControl>),
-    options?: SignalAbstractControlOptions
+    options?: SignalAbstractControlOptions<
+      SignalFormGroupValue<TControl>,
+      TMetadata
+    >
   ) {
     super(options);
     this._controls = signal(

@@ -1,21 +1,28 @@
-import { computed, Signal, signal } from '@angular/core';
+import { computed, effect, Signal, signal, WritableSignal } from '@angular/core';
 import { SignalValidatorFn } from './SignalValidatorFn';
 import { SignalAsyncValidatorFn } from './SignalAsyncValidatorFn';
 import { SignalValidationErrors } from './SignalValidationErrors';
 import { lastValueFrom, Observable } from 'rxjs';
 
-export interface SignalAbstractControlOptions<T = unknown> {
+export interface SignalAbstractControlOptions<
+  TValue = unknown,
+  TMetadata = unknown
+> {
   validators?: SignalValidatorFn[];
   asyncValidators?: SignalAsyncValidatorFn[];
-  disabled?: (control: SignalAbstractControl<T>) => boolean;
-  hidden?: (control: SignalAbstractControl<T>) => boolean;
-  readOnly?: (control: SignalAbstractControl<T>) => boolean;
+  metadata?: TMetadata;
+  disabled?: (control: SignalAbstractControl<TValue, TMetadata>) => boolean;
+  hidden?: (control: SignalAbstractControl<TValue, TMetadata>) => boolean;
+  readOnly?: (control: SignalAbstractControl<TValue, TMetadata>) => boolean;
 }
 
-export abstract class SignalAbstractControl<T = unknown> {
+export abstract class SignalAbstractControl<
+  TValue = unknown,
+  TMetadata = unknown
+> {
   private readonly _pending = signal(false);
-  private readonly _validators = signal<SignalValidatorFn[]>([]);
-  private readonly _asyncValidators = signal<SignalAsyncValidatorFn[]>([]);
+  private readonly _validators: WritableSignal<SignalValidatorFn[]>;
+  private readonly _asyncValidators: WritableSignal<SignalAsyncValidatorFn[]>;
   private readonly _errors = signal<SignalValidationErrors | null>(null);
   private readonly _disabled = signal(false);
   private readonly _hidden = signal(false);
@@ -26,9 +33,11 @@ export abstract class SignalAbstractControl<T = unknown> {
   protected readonly _parent = signal<SignalAbstractControl | undefined>(
     undefined
   );
+  protected readonly _metadata: WritableSignal<TMetadata | undefined>;
 
-  abstract readonly rawValue: Signal<T>;
-  abstract readonly value: Signal<T | undefined>;
+  abstract readonly rawValue: Signal<TValue>;
+  abstract readonly value: Signal<TValue | undefined>;
+  readonly metadata: Signal<TMetadata | undefined>;
   abstract readonly invalid: Signal<boolean>;
   abstract readonly valid: Signal<boolean>;
   readonly disabled: Signal<boolean>;
@@ -48,10 +57,11 @@ export abstract class SignalAbstractControl<T = unknown> {
   readonly parent = this._parent.asReadonly();
   readonly root = computed(() => this._getRoot());
 
-  constructor(options?: SignalAbstractControlOptions) {
-    if (options?.validators) this._validators.set(options.validators);
-    if (options?.asyncValidators)
-      this._asyncValidators.set(options.asyncValidators);
+  constructor(options?: SignalAbstractControlOptions<TValue, TMetadata>) {
+    this._validators = signal(options?.validators ?? []);
+    this._asyncValidators = signal(options?.asyncValidators ?? []);
+    this._metadata = signal(options?.metadata);
+    this.metadata = this._metadata.asReadonly();
 
     const disabled = options?.disabled;
     if (disabled)
@@ -74,6 +84,11 @@ export abstract class SignalAbstractControl<T = unknown> {
       );
     else this.readOnly = this._readOnly.asReadonly();
     this.writable = computed(() => !this.readOnly());
+
+    effect(() => {
+      this.value();
+      this._validate();
+    });
   }
 
   private _getValidator(): SignalValidatorFn | null {
@@ -133,19 +148,20 @@ export abstract class SignalAbstractControl<T = unknown> {
       if (!compete) return;
       this._pending.set(false);
       this._errors.set(asyncErrors);
+      this._clearPreviousAsyncValidation = undefined;
     });
   }
 
-  protected abstract _setValue(value: T): void;
+  protected abstract _setValue(value: TValue): void;
 
-  setValue(value: T): void {
+  setValue(value: TValue): void {
     this._setValue(value);
     this._validate();
   }
 
-  protected abstract _reset(value?: T): void;
+  protected abstract _reset(value?: TValue): void;
 
-  reset(value?: T): void {
+  reset(value?: TValue): void {
     this._reset(value);
     this.setDirty(false);
     this.setTouched(false);
@@ -174,36 +190,30 @@ export abstract class SignalAbstractControl<T = unknown> {
 
   addValidators(validators: SignalValidatorFn[]): void {
     this._validators.set([...this._validators(), ...validators]);
-    this._validate();
   }
 
   addAsyncValidators(asyncValidators: SignalAsyncValidatorFn[]): void {
     this._asyncValidators.set([...this._asyncValidators(), ...asyncValidators]);
-    this._validate();
   }
 
   removeValidators(validators: SignalValidatorFn[]): void {
     this._validators.set(
       this._validators().filter((v) => !validators.includes(v))
     );
-    this._validate();
   }
 
   removeAsyncValidators(asyncValidators: SignalAsyncValidatorFn[]): void {
     this._asyncValidators.set(
       this._asyncValidators().filter((v) => !asyncValidators.includes(v))
     );
-    this._validate();
   }
 
   clearValidators(): void {
     this._validators.set([]);
-    this._validate();
   }
 
   clearAsyncValidators(): void {
     this._asyncValidators.set([]);
-    this._validate();
   }
 
   hasValidator(validator: SignalValidatorFn): boolean {
@@ -212,5 +222,9 @@ export abstract class SignalAbstractControl<T = unknown> {
 
   hasAsyncValidator(asyncValidator: SignalAsyncValidatorFn): boolean {
     return this._asyncValidators().includes(asyncValidator);
+  }
+
+  setMetadata(metadata: TMetadata): void {
+    this._metadata.set(metadata);
   }
 }

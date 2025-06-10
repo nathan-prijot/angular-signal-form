@@ -4,18 +4,22 @@ import {
   SignalAbstractControlOptions,
 } from './SignalAbstractControl';
 
-export interface SignalFormControlOptions extends SignalAbstractControlOptions {
+export interface SignalFormControlOptions<TValue = unknown, TMetadata = unknown>
+  extends SignalAbstractControlOptions<TValue, TMetadata> {
   updateOn?: 'change' | 'blur';
 }
 
-export class SignalFormControl<T = unknown> extends SignalAbstractControl<T> {
-  private readonly _defaultValue: T;
-  private readonly _value: WritableSignal<T>;
+export class SignalFormControl<
+  TValue = unknown,
+  TMetadata = unknown
+> extends SignalAbstractControl<TValue, TMetadata> {
+  private readonly _defaultValue: TValue;
+  private readonly _value: WritableSignal<TValue>;
   private readonly _touched = signal(false);
   private readonly _dirty = signal(false);
 
-  override readonly rawValue: Signal<T>;
-  override readonly value: Signal<T | undefined>;
+  override readonly rawValue: Signal<TValue>;
+  override readonly value: Signal<TValue | undefined>;
   override readonly invalid = computed(
     () => !!this.errors() && this.enabled() && this.visible()
   );
@@ -26,7 +30,10 @@ export class SignalFormControl<T = unknown> extends SignalAbstractControl<T> {
   override readonly pristine: Signal<boolean>;
   readonly updateOn: 'change' | 'blur';
 
-  constructor(defaultValue: T, options?: SignalFormControlOptions) {
+  constructor(
+    defaultValue: TValue,
+    options?: SignalFormControlOptions<TValue, TMetadata>
+  ) {
     super(options);
     this.updateOn = options?.updateOn ?? 'change';
     this._defaultValue = defaultValue;
@@ -42,11 +49,11 @@ export class SignalFormControl<T = unknown> extends SignalAbstractControl<T> {
     this._validate();
   }
 
-  protected override _setValue(value: T): void {
+  protected override _setValue(value: TValue): void {
     this._value.set(value);
   }
 
-  protected override _reset(value?: T): void {
+  protected override _reset(value?: TValue): void {
     this._value.set(value !== undefined ? value : this._defaultValue);
   }
 
