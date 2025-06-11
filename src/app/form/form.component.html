@@ -7,6 +7,7 @@
       flex-direction: column;
       gap: 1rem;
     "
+    [signalFormGroup]="formGroup"
   >
     <div style="width: 100%; display: flex; gap: 1rem">
       <button (click)="formGroup.reset()">Reset</button>
@@ -71,8 +72,17 @@
         label="Lines"
         [control]="formGroup.controls().lines"
       />
+    </div>
+    <div style="width: 100%; display: flex; gap: 1rem">
       <app-sub-control-input
+        style="width: 50%"
+        label="Sub control via signalFormControl"
         [signalFormControl]="formGroup.controls().search"
+      />
+      <app-sub-control-input
+        style="width: 50%"
+        label="Sub control via signalFormControlName"
+        signalFormControlName="search"
       />
     </div>
     <div style="width: 100%; display: flex; gap: 1rem">

@@ -1,6 +1,8 @@
 import { Component, input } from '@angular/core';
-import { SignalFormControl } from '../../../signal-form/SignalFormControl';
-import { SignalFormControlDirective } from '../../../signal-form/SignalFormControlDirective';
+import {
+  SignalFormControl,
+  SignalFormControlDirective,
+} from '../../../signal-form';
 import { ErrorMessagePipe } from '../error-message.pipe';
 
 @Component({

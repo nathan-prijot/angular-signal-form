@@ -1,7 +1,7 @@
 import { computed, effect, Signal, signal, WritableSignal } from '@angular/core';
-import { SignalValidatorFn } from './SignalValidatorFn';
-import { SignalAsyncValidatorFn } from './SignalAsyncValidatorFn';
-import { SignalValidationErrors } from './SignalValidationErrors';
+import { SignalValidatorFn } from '../interfaces/SignalValidatorFn';
+import { SignalAsyncValidatorFn } from '../interfaces/SignalAsyncValidatorFn';
+import { SignalValidationErrors } from '../interfaces/SignalValidationErrors';
 import { lastValueFrom, Observable } from 'rxjs';
 
 export interface SignalAbstractControlOptions<

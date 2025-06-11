@@ -12,7 +12,7 @@ type SignalFormArrayValue<TControl extends SignalAbstractControl> =
   | undefined;
 
 export class SignalFormArray<
-  TControl extends SignalAbstractControl,
+  TControl extends SignalAbstractControl = SignalAbstractControl,
   TMetadata = unknown
 > extends SignalAbstractControl<SignalFormArrayValue<TControl>, TMetadata> {
   private readonly _controls: WritableSignal<TControl[]>;

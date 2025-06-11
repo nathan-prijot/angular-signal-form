@@ -1,7 +1,9 @@
 import { Component, input } from '@angular/core';
-import { SignalFormArray } from '../../../signal-form/SignalFormArray';
-import { SignalFormControl } from '../../../signal-form/SignalFormControl';
-import { SignalValidators } from '../../../signal-form/SignalValidators';
+import {
+  SignalFormArray,
+  SignalFormControl,
+  SignalValidators,
+} from '../../../signal-form';
 import { TextFieldComponent } from '../text-field/text-field.component';
 
 @Component({

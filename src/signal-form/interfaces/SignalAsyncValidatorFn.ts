@@ -1,4 +1,4 @@
-import { SignalAbstractControl } from './SignalAbstractControl';
+import { SignalAbstractControl } from '../controls/SignalAbstractControl';
 import { SignalValidationErrors } from './SignalValidationErrors';
 import { Observable } from 'rxjs';
 

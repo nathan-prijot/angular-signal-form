@@ -1,10 +1,4 @@
-import {
-  computed,
-  effect,
-  Signal,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import {
   SignalAbstractControl,
   SignalAbstractControlOptions,
@@ -27,7 +21,7 @@ type SignalFormGroupControls<
 };
 
 export class SignalFormGroup<
-  TControl extends { [K in keyof TControl]: SignalAbstractControl },
+  TControl extends { [K in keyof TControl]: SignalAbstractControl } = object,
   TMetadata = unknown
 > extends SignalAbstractControl<SignalFormGroupValue<TControl>, TMetadata> {
   private readonly _controls: WritableSignal<SignalFormGroupControls<TControl>>;

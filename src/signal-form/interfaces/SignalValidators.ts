@@ -1,5 +1,5 @@
 import { ValidationErrors } from '@angular/forms';
-import { SignalAbstractControl } from './SignalAbstractControl';
+import { SignalAbstractControl } from '../controls/SignalAbstractControl';
 
 export class SignalValidators {
   static required(control: SignalAbstractControl): ValidationErrors | null {

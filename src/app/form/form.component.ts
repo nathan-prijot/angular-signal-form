@@ -1,18 +1,22 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { SignalAbstractControl } from '../../signal-form/SignalAbstractControl';
-import { SignalFormArray } from '../../signal-form/SignalFormArray';
-import { SignalFormControl } from '../../signal-form/SignalFormControl';
-import { SignalFormGroup } from '../../signal-form/SignalFormGroup';
-import { SignalValidationErrors } from '../../signal-form/SignalValidationErrors';
-import { SignalValidators } from '../../signal-form/SignalValidators';
+import {
+  SignalAbstractControl,
+  SignalFormArray,
+  SignalFormControl,
+  SignalFormControlDirective,
+  SignalFormControlNameDirective,
+  SignalFormGroup,
+  SignalFormGroupDirective,
+  SignalValidationErrors,
+  SignalValidators,
+} from '../../signal-form';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { ControlControlPanelComponent } from './control-control-panel/control-control-panel.component';
 import { ErrorMessagePipe } from './error-message.pipe';
 import { MultiTextFieldComponent } from './multi-text-field/multi-text-field.component';
-import { TextFieldComponent } from './text-field/text-field.component';
 import { SubControlInputComponent } from './sub-control-input/sub-control-input.component';
-import { SignalFormControlDirective } from '../../signal-form/SignalFormControlDirective';
+import { TextFieldComponent } from './text-field/text-field.component';
 
 @Component({
   selector: 'app-form',
@@ -26,6 +30,8 @@ import { SignalFormControlDirective } from '../../signal-form/SignalFormControlD
     ErrorMessagePipe,
     SubControlInputComponent,
     SignalFormControlDirective,
+    SignalFormControlNameDirective,
+    SignalFormGroupDirective,
   ],
 })
 export class FormComponent {
