@@ -7,7 +7,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { SignalFormControl } from '../controls/SignalFormControl';
+import { SignalFormControl } from '../controls';
 import { NgSignalFormControl } from './NgSignalFormControl';
 
 @Directive({

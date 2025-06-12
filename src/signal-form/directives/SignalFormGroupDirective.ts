@@ -1,6 +1,6 @@
 import { Directive, forwardRef, input } from '@angular/core';
+import { SignalFormGroup } from '../controls';
 import { NgSignalFormGroup } from './NgSignalFormGroup';
-import { SignalFormGroup } from '../controls/SignalFormGroup';
 
 @Directive({
   selector: '[signalFormGroup]',

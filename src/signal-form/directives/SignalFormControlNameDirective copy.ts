@@ -1,14 +1,7 @@
-import {
-  computed,
-  Directive,
-  forwardRef,
-  inject,
-  input,
-  Signal,
-} from '@angular/core';
+import { computed, Directive, forwardRef, inject, input } from '@angular/core';
+import { SignalFormControl } from '../controls';
 import { NgSignalFormControl } from './NgSignalFormControl';
 import { NgSignalFormGroup } from './NgSignalFormGroup';
-import { SignalFormControl } from '../controls/SignalFormControl';
 
 @Directive({
   selector: '[signalFormControlName]',
@@ -20,20 +13,26 @@ import { SignalFormControl } from '../controls/SignalFormControl';
   ],
 })
 export class SignalFormControlNameDirective extends NgSignalFormControl {
-  private readonly _ngFormGroup = inject(NgSignalFormGroup);
+  private readonly _ngFormGroup = inject(NgSignalFormGroup, {
+    optional: true,
+  });
 
   readonly signalFormControlName = input.required<string>();
   readonly signalFormControl = computed(() => this._getControl());
 
   private _getControl(): SignalFormControl {
+    if (!this._ngFormGroup)
+      throw new Error(
+        'No parent form group found. Ensure this directive is used within a signal form group.'
+      );
     const controls = this._ngFormGroup.signalFormGroup().controls() as Record<
       string,
       SignalFormControl
     >;
     const control = controls[this.signalFormControlName()];
-    if (!control)
+    if (!control || !(control instanceof SignalFormControl))
       throw new Error(
-        `No control found with name '${this.signalFormControlName()}'.`
+        `No form control found with name '${this.signalFormControlName()}'.`
       );
     return controls[this.signalFormControlName()];
   }
